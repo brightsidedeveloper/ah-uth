@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package buf;
+
+option go_package = "/buf";
+
+message Error {
+  string message = 1;
+}
+
+message User {
+  int32 id = 1;
+  string name = 2;
+}
+
+message Users {
+  repeated User users = 1;
+}
