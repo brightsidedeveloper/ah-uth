@@ -19,7 +19,7 @@ post(
 
 func (h *Handler) GetUsers(w http.ResponseWriter, r *http.Request) {
 
-	qUsers, err := h.query.ListUsers(context.Background())
+	qUsers, err := h.query.ListUsers(r.Context())
 	if err != nil {
 		fmt.Println(err)
 		h.bin.WriteError(w, http.StatusInternalServerError, "Failed to get users")
