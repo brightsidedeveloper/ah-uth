@@ -13,6 +13,10 @@ export interface Error {
   message: string;
 }
 
+export interface OAuth {
+  success: boolean;
+}
+
 export interface User {
   id: number;
   name: string;
@@ -76,6 +80,64 @@ export const Error: MessageFns<Error> = {
   fromPartial<I extends Exact<DeepPartial<Error>, I>>(object: I): Error {
     const message = createBaseError();
     message.message = object.message ?? "";
+    return message;
+  },
+};
+
+function createBaseOAuth(): OAuth {
+  return { success: false };
+}
+
+export const OAuth: MessageFns<OAuth> = {
+  encode(message: OAuth, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): OAuth {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseOAuth();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): OAuth {
+    return { success: isSet(object.success) ? globalThis.Boolean(object.success) : false };
+  },
+
+  toJSON(message: OAuth): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<OAuth>, I>>(base?: I): OAuth {
+    return OAuth.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<OAuth>, I>>(object: I): OAuth {
+    const message = createBaseOAuth();
+    message.success = object.success ?? false;
     return message;
   },
 };

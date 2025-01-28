@@ -8,6 +8,10 @@ message Error {
   string message = 1;
 }
 
+message OAuth {
+  bool success = 1;
+}
+
 message User {
   int32 id = 1;
   string name = 2;

@@ -10,7 +10,7 @@ type Handler struct {
 	query *query.Queries
 }
 
-func NewHandler(b *bin.Bin, q *query.Queries) *Handler {
+func New(b *bin.Bin, q *query.Queries) *Handler {
 	return &Handler{
 		bin:   b,
 		query: q,

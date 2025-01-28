@@ -11,7 +11,7 @@ import (
 type Bin struct {
 }
 
-func NewBinary() *Bin {
+func New() *Bin {
 	return &Bin{}
 
 }

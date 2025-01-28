@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"server/internal/auth"
 	"server/internal/bin"
 	"server/internal/handler"
 	"server/internal/query"
@@ -27,13 +28,16 @@ func main() {
 		log.Fatal(err)
 	}
 
+	auth.New()
+
 	q := query.New(conn)
 
-	b := bin.NewBinary()
+	b := bin.New()
 
-	h := handler.NewHandler(b, q)
+	h := handler.New(b, q)
 
 	r := chi.NewRouter()
+
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
